@@ -194,23 +194,22 @@ Trade-offs:
 - Subscription support in synthetic GraphQL is limited / preview in some tiers. 
 
 ### Google Cloud
-Native GraphQL alternative: GraphQL via Apigee & self-hosting
-- Google Cloud does not currently have a first-party, fully managed GraphQL backend service like AppSync. Instead, their GraphQL support comes through API management (Apigee) and by self-hosting GraphQL services.
+Native GraphQL: GraphQL via Apigee & self-hosting
+- Google Cloud recently added native graphQL API support to Apigee, but it can also be done via self-hosting GraphQL services.
 
 Key features via Apigee:
-- Apigee (API management) supports GraphQL as a first-class citizen: there’s a GraphQL policy in Apigee to validate schema, parse requests, and enforce quotas / security. This allows you to
+- Apigee (API management) supports GraphQL APIs natively: there’s a GraphQL policy in Apigee to validate schema, parse requests, and enforce quotas / security. This allows you to:
     - Validate incoming GraphQL queries against a schema. 
     - Apply quota, OAuth2, API-key, other policies to GraphQL requests (just like REST). 
-    - Use Apigee’s developer portal: when publishing a GraphQL API, Apigee’s portal supports a GraphQL Explorer (interactive playground) based on GraphiQL. 
+    - Use Apigee’s developer portal: when publishing a GraphQL API, Apigee’s portal supports a GraphQL Explorer (interactive playground) based on GraphiQL.
 - Lifecycle management: With Apigee, you can "productize" GraphQL APIs: versioning, access control, analytics, etc. 
 
 Self-hosted GraphQL on GCP:
 - You can run GraphQL servers (Apollo, Hasura, etc.) on Cloud Run, GKE, or Compute Engine.
 
 Trade-offs:
-- You don’t get a fully managed GraphQL backend out-of-the-box (like AppSync), so you may need to manage servers or containers.
-- Using Apigee gives powerful management, but actual GraphQL resolvers and server logic live elsewhere.
-- There might be additional cost / complexity by combining Apigee + GraphQL backend (hosting + API management).
+- Schema validation is “expensive”: verifying against a schema can add latency / CPU cost. 
+- You can only upload one schema per GraphQL policy. If you need multiple schemas, you need multiple GraphQL policies in your proxy
 
 ## Websocket Services
 ### AWS
