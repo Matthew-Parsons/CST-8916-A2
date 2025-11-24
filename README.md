@@ -1,8 +1,29 @@
 # Executive Summary
+Organizations nowadays are increasingly requiring real-time APIs, streaming data pipelines, and data analytics in order to deliver responsive applications and meaningful analytics. AWS, Azure, and Google Cloud each provide their own platforms and services to support these needs, each of them with distinct strengths and trade-offs.
 
+## AWS
+Strengths: Mature ecosystem for APIs (REST, WebSocket, GraphQL via AppSync), flexible streaming with Kinesis and MSK, and advanced stream processing with Managed Flink. Deep integration with AWS compute and storage services enables highly scalable, event-driven architectures.
+
+Considerations: Higher architectural complexity; stream processing and real-time analytics require specialized expertise.
+
+Best Use: High-throughput, stateful streaming pipelines, complex real-time analytics, and applications leveraging a mix of REST, GraphQL, and WebSocket APIs.
+
+## Azure
+Strengths: User-friendly tools for real-time analytics and messaging (Stream Analytics, Event Hubs, SignalR/Web PubSub), strong SQL-based stream processing, and hybrid/edge deployment options. Excellent integration with Power BI and other enterprise tools.
+
+Considerations: Advanced streaming workloads may require additional tools like Databricks or Spark.
+
+Best Use: Enterprise applications requiring straightforward real-time analytics, dashboards, IoT data processing, and hybrid or edge deployments.
+
+## Google Cloud
+Strengths: Fully-managed, serverless streaming with Pub/Sub; unified batch and streaming pipelines using Dataflow (Apache Beam); real-time analytics with BigQuery and continuous queries; minimal operational overhead.
+
+Considerations: No native WebSocket service; Beam/Dataflow has a steeper learning curve than SQL-based alternatives.
+
+Best Use: Scalable real-time analytics pipelines with minimal infrastructure management, analytics-focused applications, and global-scale event ingestion.
 
 # Introduction
-
+Amazon Web Services (AWS), Microsoft Azure, and Google Cloud are the three main cloud providers worldwide, composing over 50% of the market all together. As such, the services they provide are often compared to each other by businesses to determine which service will provide them the most benefit for what they want. AWS is the largest of the three, having the most mature ecosystem and usage. Azure is the most user-friendly, and has the best compatibility with the Windows environment. Google Cloud has the best services for cloud-native solutions, and is known to be the best provider of AI/ML and Big Data services.
 
 # Service Comparison
 ## RESTful API Services
@@ -294,7 +315,7 @@ Stream Processing:
 - Managed Service for Apache Flink: AWS offers Flink (via Kinesis) for more complex, stateful stream computation. According to AWS architecture docs, you can run Flink jobs with Apache libraries. 
 - Consumers of Kinesis Data Streams can also use AWS Lambda, EC2, or other services to process stream data. 
 
-Strengths / Weaknesses of AWS
+Strengths / Trade-offs:
 - Flexibility: Kinesis + MSK together give you both a simple managed stream and a full Kafka-compatible solution.
 - Scalability: On-demand Kinesis helps autoscale ingestion without manual shard provisioning. 
 - Latency / Real-Time: Very good; you can design low-latency pipelines.
@@ -316,7 +337,7 @@ Stream Processing:
 - Azure Stream Analytics (ASA): A fully managed stream processing service where you can author SQL-like queries to do windowed aggregations, joins, filtering, pattern detection, etc. 
 - Other Options: For more advanced or custom processing, you can use Azure Databricks (Spark Structured Streaming), Azure Functions, or Azure Event Streams (part of newer Fabric offering) depending on your architecture. 
 
-Strengths / Weaknesses of Azure:
+Strengths / Trade-offs:
 - Ease of Use: Stream Analytics is very approachable with SQL-style queries; good for straightforward streaming ETL / analytics.
 - Scalability:
     - Event Hubs scales elastically; you can adjust throughput as needed. 
@@ -343,7 +364,7 @@ Stream Processing:
 - Integrations: Dataflow has I/O connectors (sources + sinks) for many Google and non-Google services. 
 - Exactly-once processing: With Pub/Sub + Dataflow, you can build pipelines that support “exactly once” semantics (depending on code / design). 
 
-Strengths / Weaknesses of Google Cloud:
+Strengths / Trade-offs:
 - Simplicity & No Shards: Pub/Sub abstracts partitioning/shards – you don't need to plan capacity horizontally (unlike Kafka or Kinesis).
 - Unified Model: Dataflow + Beam gives you a single programming model for both stream and batch, which simplifies pipeline development.
 - Autoscaling: Dataflow can autoscale; resource management is mostly handled by Google.
@@ -431,22 +452,45 @@ Trade-offs / Considerations:
 
 # Use Case Analysis
 ## Case 1:
+A company wants to build a low-latency stock trading platform. their requirements for it are that it must be able to;
+- Ingest millions of stock market events per second from multiple exchanges
+- Perform real-time analytics and risk calculations on streaming data
+- Execute algorithmic trading strategies in near real-time
+- Provides real-time dashboards for traders with market trends, alerts, and portfolio analytics
+- Send notifications and alerts via mobile or web apps using WebSockets
 
+In this scenario, AWS is the best service provider for the company for the following reasons:
+1. Scalability: AWS Kinesis can elastically scale to handle millions of events per second, which is necessary for volatile markets.
+2. Low-latency, stateful processing: Managed Flink supports complex event patterns, joins, and windowed aggregations, all of which are needed for trading analytics.
+3. Multi-protocol support: AWS can run REST APIs to do the trading, GraphQL for custom queries, and WebSockets to view live market feeds, all simultaneously.
+4. Ecosystem integration: Stock market integration with AWS services reduces operational overhead, while supporting advanced analytics.
 
 ## Case 2:
+A large retail chain wants to implement a real-time inventory and customer engagement system that: 
+1. Tracks inventory levels across thousands of stores in real time
+2. Monitors point-of-sale (POS) transactions and sensor data to detect stockouts, high-demand items, or promotions effectiveness
+3. Sends real-time notifications to store staff and customers (e.g., low stock alerts, personalized promotions)
+4. Provides dashboards for regional managers showing sales trends, stock movement, and operational KPIs
+5. Supports dynamic pricing and targeted promotions based on real-time demand.
 
+In this scenario, AWS is the best service provider for the company for the following reasons:
+1. SQL-based streaming: Azure Stream Analytics allows for business teams to define rules for alerts, stock monitoring, and promotions without heavy coding.
+2. Real-time notifications: Web PubSub delivers instant updates to apps, dashboards, and store personnel.
+3. IoT + POS integration: Azure Event Hubs handles high-throughput event streams from multiple locations and devices.
+4. Seamless analytics and AI: Integrates easily with Databricks and Synapse for forecasting, recommendations, and dynamic pricing.
+5. Rapid deployment and scalability: Fully managed services reduce operational overhead while scaling to hundreds or thousands of stores.
 
 # Conclusion
 Each of the 3 providers all have some form of service for the different forms of remote data and real-time applications, each of which have varying levels of maturity and integration. 
 
-AWS has the most mature API ecosystem of the three, with strong streaming and processing services, as well as good event and real-time integration. Its best use cases are for large-scale event systems, streaming pipelines, and Kinesis/MSK based real-time analytics. 
+AWS has the most mature API ecosystem of the three, with strong streaming and processing services, as well as good event and real-time integration. Its best use cases are for large-scale event systems, high-throughput, stateful streaming pipelines, and Kinesis/MSK based real-time analytics.
 
 Azure is the best in terms of user-friendly real-time tools like Azure APIM and PubSub, with great BI integration and good ingestion with Event Hubs that's also Kafka compatible. Its best use cases are for enterprises in need of simple and reliable real-time analytics pipelines that have minimal overhead, as well as SQl-first streaming and IoT real-time analytics scenarios. 
 
 Google Cloud has extremely scalable and serverless ingestion with Pub/Sub, unified batch and stream processing with Dataflow, and a good real-time warehouse with BigQuery streaming and continuous queries. Its best use cases are for teams in need of fully managed real-time pipelines that can autoscale, and analytics-heavy scenarios making use of BigQuery.
 
 # References
-General Documentation:
+## General Documentation:
 - AWS documentation: https://docs.aws.amazon.com/
 - Azure documentation: https://learn.microsoft.com/en-us/azure/?product=popular
 - Google Cloud documentation: https://docs.cloud.google.com/docs
